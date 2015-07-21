@@ -1,0 +1,2 @@
+# Product-Value-Optimization
+Given an inventory of commercial products and their features such as condition, value, price etc., maximize wealth by making logical buying and selling decisions so as to obtain maximum profit. Furthermore predict the quality of future products based on products in the inventory by applying different classification algorithms trained using observed data of quality to make predictions on unobserved data.
