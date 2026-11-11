@@ -1,25 +1,8 @@
-
 from agents import Agent
-
-class Agent_skatkar(Agent):
+        return prob > price / value
+        """Buy when the chance of it working beats price/value."""
     def will_buy(self, value, price, prob):
- 
-#           ****ONE SOLUTION TO THE PROBLEM THAT FINDS A HIGHER PROFIT THAN THE GIVEN ALGORITHMS****
-#----------------------------------------------------------------------------------------------------------------- 
-            # if price/value < 0.25:
-                # return (prob > 0.3)
-            
-            # elif price/value < 0.5:
-                # return (prob > 0.5)
-            
-            # else:
-                # return (prob > 0.75)
-                
-#------------------------------------------------------------------------------------------------------------------
+class Agent_skatkar(Agent):
 
 
-#           ****AN OPTIMIZED VERSION OF THE INITIAL SOLUTION****
-#------------------------------------------------------------------------------------------------------------------
-            return (prob > (price/value))
-            
-#------------------------------------------------------------------------------------------------------------------
+

@@ -1,96 +1,50 @@
-# AI Asset Value Optimization
+# Product Value Optimization
 
-A machine learning system for evaluating product quality and maximizing profit in various market conditions through intelligent buying decisions.
+Agents that decide which products to buy, to make as much money as possible. Built in three phases for a course project.
 
-## Project Overview
+## How it works
 
-This project implements an AI agent system that evaluates products based on their features, price, and value to make optimal purchasing decisions. The system was developed through three progressive phases:
+Every product has a value (1000), a price and a hidden label: good (works, pays the value) or bad (pays nothing). An agent's wealth is the value of the good products it bought minus what it paid.
 
-1. **Phase I**: A rule-based system using price-to-value ratios to make buying decisions
-2. **Phase II**: A machine learning approach with classifier evaluation and selection
-3. **Phase III**: An adaptive system that learns from purchased products to improve future decisions
+1. **Phase 1:** No data, only a probability that the product works. `Agent_skatkar` buys when `prob > price / value`. Tested in three markets: fair, junk yard and fancy.
+2. **Phase 2:** Products have features. `Agent_skatkar` fits about 40 scikit-learn classifiers (kNN, trees, forests, SVC, discriminant analysis, etc.) and keeps the one with the best validation accuracy. The simulator then buys at several prices using `value * prob > price`.
+3. **Phase 3:** The agent starts with one good and one bad product and picks products one at a time, up to half of the list. Before each pick it refits `BernoulliNB` on what it owns, then takes the product with the highest `prob * (value - price)`.
 
-## Features
-
-- **Optimized Decision Algorithm**: Implements a dynamic probability assignment based on price-to-value ratios
-- **Classifier Selection System**: Evaluates multiple classifiers using GridSearchCV for parameter tuning
-- **Performance Metrics**: Uses accuracy, precision, recall, F1-score, and AUC to determine optimal classifiers
-- **Adaptive Learning**: Continuously improves classification by learning from past purchasing decisions
-- **Market Adaptation**: Performs well across various market conditions (Fair Market, Junk Yard, Fancy Market)
-
-## Installation
+## Setup
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/ai-product-assessment.git
-cd ai-product-assessment
-
-# Create a virtual environment
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
+venv\Scripts\activate
+pip install numpy scikit-learn
 ```
 
-## Usage
+The code is Python 3. Run each script from inside its phase folder, since datasets are read from `./`. Copy the dataset files you need from that phase's `Datasets` folder next to the script.
 
-### Phase I: Basic Agent
-
-```python
-# Add import statement at the beginning of simulate_agents_phase1.py
-from agent_skatkar import Agent_skatkar
-
-# Add the agent to the simulation
-agents.append(Agent_skatkar("agent_skatkar"))
-
-# Run the simulation
-python simulate_agents_phase1.py
+```bash
+python simulate_agents_phase1.py   # Phase 1
+python simulate_agents_phase2.py   # Phase 2 (uses dataset12)
+python simulate_agents_phase3.py   # Phase 3 (uses dataset1)
 ```
 
-### Phase II: Machine Learning Agent
-
-```python
-# Add import statement at the beginning of simulate_agents_phase2.py
-from agent_skatkar import *
-
-# Add the agent to the simulation
-agents.append(Agent_skatkar("My_classifier"))
-
-# Run the simulation
-python simulate_agents_phase2.py
-```
-
-### Phase III: Adaptive Learning Agent
-
-```python
-# Add import statement at the beginning of simulate_agents_phase3.py
-from agent_skatkar import *
-
-# Initialize the agent
-agent = Agent_skatkar("skatkar")
-
-# Run the simulation
-python simulate_agents_phase3.py
-```
+Phase 2 also writes the chosen classifier's validation predictions to `test_pred.txt`.
 
 ## Results
 
-### Phase I Performance
+### Phase 1
 
-The implemented strategy outperformed all baseline agents across different market conditions:
+| Market | Wealth |
+|--------|--------|
+| Fair | $171,979.38 |
+| Junk yard | $85,311.13 |
+| Fancy | $254,593.96 |
 
-| Market Type | Agent Performance |
-|-------------|-------------------|
-| Fair Market | $171,979.38 |
-| Junk Yard   | $85,311.13 |
-| Fancy Market| $254,593.96 |
+### Phase 2
 
-### Phase II Classifier Performance
+Beat the baseline agents in 9 of 12 datasets.
 
-Various classification metrics were used to select the best classifier for each dataset, resulting in superior performance compared to baseline agents in 9 out of 12 test cases.
+### Phase 3
 
-### Phase III Strategy Comparison
+Final wealth with different classifiers swapped into the agent. The code currently uses `BernoulliNB`; the others were tried by changing `self.clf`.
 
 | Classifier | Final Wealth | Good Products |
 |------------|--------------|---------------|
@@ -106,12 +60,7 @@ Various classification metrics were used to select the best classifier for each 
 | Baseline: CheapAgent | $243,838.41 | 498 |
 | Baseline: RandomAgent | $15,160.33 | 513 |
 
-## Technologies Used
-
-- Python
-- Scikit-learn (GridSearchCV, various classification algorithms)
-- NumPy/Pandas for data handling
-- Anaconda/IPython environment
+These numbers come from the original Python 2 runs and may differ with current scikit-learn.
 
 ## Author
 
